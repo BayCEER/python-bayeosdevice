@@ -1,0 +1,28 @@
+<html>
+   <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <title>{{ title }}</title>
+   </head>
+   <body>
+     <ul>
+       {% for item in items %}
+         <li>{{ escape(item) }}</li>
+       {% end %}
+     </ul>
+   </body>
+
+
+    <script type="text/javascript" class="init" th:inline="javascript">
+        $(document).ready(function(){
+            var url = "ws://" + location.host + "/messages";
+            var ws = new WebSocket(url);
+            ws.onopen = function() {
+              ws.send("Hello, world");
+            };
+            ws.onmessage = function (evt) {
+              console.info(evt.data);
+            };
+        });
+    </script>
+
+ </html>
