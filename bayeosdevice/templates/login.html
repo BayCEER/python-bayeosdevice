@@ -1,0 +1,17 @@
+ <!DOCTYPE html>
+ <html>      
+  <head>
+    <title>Login</title>    
+  </head>
+  <body>
+		{% extends "main.html" %}
+		{% block main %}
+			<form class="form-signin" method="post" action="/login" autocomplete="off">
+			<p class="lead strong">Please log in</p>							
+			<input id="password" name="password" class="form-control" type="password" placeholder="Password"/>
+			<button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Log in</button>				
+			</form>
+			{% end %}
+  </body>
+</html>
+

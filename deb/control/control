@@ -1,0 +1,8 @@
+Package: [[name]]
+Version: [[version]]
+Section: python
+Priority: optional
+Architecture: all
+Depends: python (>=2.7), python-tornado
+Description: Python BayEOS Device Web Library
+Maintainer: oliver.archner@uni-bayreuth.de

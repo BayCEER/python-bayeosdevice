@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>{{ handler.get_host_name() }}</title>
+   
+      <link rel="stylesheet" href="{{ static_url("css/bootstrap.min.css") }}" type="text/css">      
+      <link rel="stylesheet" href="{{ static_url("css/bootstrap-toggle.min.css") }}" type="text/css">      
+
+      <link rel="stylesheet" href="{{ static_url("css/main.css") }}" type="text/css">      
+      <link rel="shortcut icon" href="{{ static_url("img/device_small.png") }}" type="image/png"/>
+      
+   </head>
+   <body>
+        {% include nav.html %}     
+        {% if error %}
+        <div class="container">
+          <div id="error" class="alert alert-warning" role="alert">Error: {{ error }}</div>
+        </div>
+        {% end %}
+        {% block main %}
+        {% end %}
+     </div>
+     {% include footer.html %}
+   </body>
+   
+   <script src="{{ static_url("js/jquery.min.js") }}" type="text/javascript"></script>         
+   <script src="{{ static_url("js/bootstrap.min.js") }}" type="text/javascript"></script>
+   <script src="{{ static_url("js/bootstrap-toggle.min.js") }}" type="text/javascript"></script>
+   {% block script %}
+   {% end %}
+ </html>
