@@ -17,7 +17,7 @@ $(document).ready(function() {
       
       // Disable all input elements 
       $("input[data-toggle='toggle']").bootstrapToggle('disable');
-      $("input[type='number']").attr("disabled","True");
+      $("input").attr("disabled","True");
       $("#div_values").before("<div class=\"row\"><div class=\"container\"><div class=\"alert alert-danger\" role=\"alert\">Communication error, please reload the page.</div></div></div>");
     }
 
@@ -42,23 +42,42 @@ $(document).ready(function() {
           }            
         } else {
           // Text
-          if (item['type'] == 'a'){
-            $(key).html(
-              "<input type=\"number\" class=\"form-control\" value=\"" + item['value'] + "\" required>"
-            )
-            $(key).children("input:first").on("keypress", function(e) {
-               if (e.keyCode == 13) {                       
+            if (item['type'] == 'a'){
+		if ($.isNumeric(item['value'])) {
+		 $(key).html(
+		     "<input type=\"number\" class=\"form-control\" value=\"" + item['value'] + "\" required>"
+		 );
+
+		 $(key).children("input:first").on("keypress", function(e) {
+		   if (e.keyCode == 13) {                       
                     if (this.value.length > 0){
                       ws.send(JSON.stringify({"type":"set action","key":$(this).parent().attr('id').substr(1),"value":this.valueAsNumber}));                                  
                     } else {
-                      alert("Please fill in a valid number.")
-                    }                       
-                }
+                      alert("Null values not allowed.")
+                    }
+                   }    
+                   });
 
-              });              
+                } else {
+   		 $(key).html(
+		     "<input type=\"text\" class=\"form-control\" value=\"" + item['value'] + "\" required>"
+		 );
+
+		 $(key).children("input:first").on("keypress", function(e) {
+		   if (e.keyCode == 13) {                       
+                       if (this.value.length > 0){
+			   ws.send(JSON.stringify({"type":"set action","key":$(this).parent().attr('id').substr(1),"value":this.value}));                                  
+                    } else {
+                      alert("Null values not allowed.")
+                    }
+                   }
+                 });		   
+		}		
+                          
           } else {
-            if (item['value'] != null){
-              $(key).text(parseFloat(item['value'].toFixed(2)));
+              if (item['value'] != null){		  
+		  // $(key).text(parseFloat(item['value'].toFixed(2)));
+		  $(key).text(item['value'].toString());
             } else {
               $(key).text("");
             }
