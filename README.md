@@ -35,7 +35,7 @@ import time
 import psutil
 
 from bayeosdevice.device import DeviceController
-from bayeosdevice.item import ItemDict, SetItemHandler
+from bayeosdevice.item import ItemDict
 
 values = ItemDict({"cpu1":None,"cpu2":None})  
 units = {"^cpu":'%',"\w+time$":'secs'}      
