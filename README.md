@@ -21,7 +21,7 @@ Web interface based on an observable Python dictionary
 `apt-get install python-bayeosdevice`
 
 ### Example Usage 
-The following [script](docs/cpudevice.py) creates a new device to show the current cpu load on your pc. Just run the script and open http://localhost to access it.
+The following [script](docs/cpudevice.py) creates a new device to show the current cpu load on your pc.
 
 ```python
 import time
@@ -49,8 +49,13 @@ try:
 except KeyboardInterrupt:
     con.stop()
 ```
-
-
+When you run the script and open http://localhost in your browser please login with password 'bayeos'
+On a successful login the following device page is show: 
+![Values](docs/ViewValues.PNG)
+ 
+You can adapt the device settings on the second tab:
+![Settings](docs/ViewSettings.PNG)
+ 
 ## Authors 
 * **Dr. Stefan Holzheu** - *Project lead* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
