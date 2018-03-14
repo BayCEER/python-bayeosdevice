@@ -3,7 +3,7 @@ import psutil
 import logging
 
 from bayeosdevice.device import DeviceController
-from bayeosdevice.item import ItemDict, SetItemHandler
+from bayeosdevice.item import ItemDict
 
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG) 
 logging.getLogger('bayeosdevice.device').setLevel(logging.DEBUG)
