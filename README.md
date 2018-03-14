@@ -65,6 +65,7 @@ except KeyboardInterrupt:
 ![Settings](docs/viewsettings.png)
 
 The DeviceController can be customized by the following constructor arguments:
+
 Argument|Description|Default
 --------|-----------|--------
 values| ItemDictionary for value page| Null
