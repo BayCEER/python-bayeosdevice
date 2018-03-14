@@ -8,7 +8,7 @@ Web interface based on an observable Python dictionary
 
 ## Getting Started
 ### Prerequisites
-- Python Version 2
+- Python Runtime
 
 ### Installing on Linux 
 - Import the repository key  
@@ -26,13 +26,9 @@ The following [script](docs/cpudevice.py) creates a new device to show the curre
 ```python
 import time
 import psutil
-import logging
 
 from bayeosdevice.device import DeviceController
 from bayeosdevice.item import ItemDict, SetItemHandler
-
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG) 
-logging.getLogger('bayeosdevice.device').setLevel(logging.DEBUG)
 
 values = ItemDict({"cpu1":None,"cpu2":None})  
 units = {"^cpu":'%',"\w+time$":'secs'}      
@@ -42,7 +38,6 @@ con = DeviceController(values,actions,units)
 con.start()
 
 try:
-    logging.debug("Starting device")
     while True:  
         if (actions["run"] == True):
             cpu = psutil.cpu_percent(percpu=True)        
@@ -53,8 +48,6 @@ try:
             time.sleep(0.01)     
 except KeyboardInterrupt:
     con.stop()
-finally:
-    logging.debug("Stopped device")   
 ```
 
 
