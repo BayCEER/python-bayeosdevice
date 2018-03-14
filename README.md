@@ -52,9 +52,9 @@ except KeyboardInterrupt:
 
 - Please run the script and open http://localhost in your browser
 - Login with password 'bayeos'
-- The value pages shows your cpu loads:
+- The value pages shows your cpu loads:  
 ![Values](docs/ViewValues.PNG)
-- You can adapt the device settings on the second tab:
+- You can adapt the device settings on the second tab:  
 ![Settings](docs/ViewSettings.PNG)
  
 ## Authors 
