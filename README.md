@@ -70,10 +70,11 @@ Argument|Description|Default
 --------|-----------|--------
 values| ItemDictionary for value page| Null
 actions|ItemDictionary for settings page| Null
-units| Dictionary for item units, key can be a regular expression like '^cpu' to match all item keys that start with a 'cpu' string| {}
+units| Dictionary for item units. Key can be a regular expression like '^cpu' to match all item keys that start with a 'cpu' string| {}
 port|Embedded web server port|80
 password|Password|bayeos
-template|Template file, used to render the device web page. File must be in folder 'bayeosdevice/templates' |items.html
+template|Template file, used to render the device web page. File must be in folder 'bayeosdevice/templates'. A blueprint for a customized template can be found in file [custom.html](bayeosdevice/templates/custom.html)|items.html  
+
 
 
 ## Authors 
