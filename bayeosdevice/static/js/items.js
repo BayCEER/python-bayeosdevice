@@ -13,82 +13,59 @@ $(document).ready(function() {
     };
 
     ws.onclose = function() {
-      console.log("WS closed.");
-      
+      console.log("WS closed.");      
       // Disable all input elements 
       $("input[data-toggle='toggle']").bootstrapToggle('disable');
       $("input").attr("disabled","True");
       $("#div_values").before("<div class=\"row\"><div class=\"container\"><div class=\"alert alert-danger\" role=\"alert\">Communication error, please reload the page.</div></div></div>");
     }
-
+  
     ws.onmessage = function (evt) {       
       console.log("Received Message:" + evt.data);
       items = JSON.parse(evt.data);        
       var i;
-      for (i in items){
-        var item = items[i];
-        var key = "#" + item['type'] + item['key'];
-        if (typeof(item['value']) == 'boolean'){           
-          // CheckBox   
-          $(key).html(
-            "<input data-toggle=\"toggle\" type=\"checkbox\" data-size=\"small\"" + ((item['value']==true)?'checked':'') + ">"
-          );
-          var tog = $(key).children("input:first").bootstrapToggle();            
-          tog.bootstrapToggle(((item['type']=="v")?'disable':'enable'));          
-          if (item['type'] == 'a'){
-            tog.change(function() {                
-              ws.send(JSON.stringify({"type":"set action","key":$(this).parent().parent().attr('id').substr(1),"value":this.checked}));                                  
-            });
-          }            
-        } else {
-          // Text
-            if (item['type'] == 'a'){
-		if ($.isNumeric(item['value'])) {
-		 $(key).html(
-		     "<input type=\"number\" class=\"form-control\" value=\"" + item['value'] + "\" required>"
-		 );
-
-		 $(key).children("input:first").on("keypress", function(e) {
-		   if (e.keyCode == 13) {                       
-                    if (this.value.length > 0){
-                      ws.send(JSON.stringify({"type":"set action","key":$(this).parent().attr('id').substr(1),"value":this.valueAsNumber}));                                  
-                    } else {
-                      alert("Null values not allowed.")
-                    }
-                   }    
-                   });
-
-                } else {
-   		 $(key).html(
-		     "<input type=\"text\" class=\"form-control\" value=\"" + item['value'] + "\" required>"
-		 );
-
-		 $(key).children("input:first").on("keypress", function(e) {
-		   if (e.keyCode == 13) {                       
-                       if (this.value.length > 0){
-			   ws.send(JSON.stringify({"type":"set action","key":$(this).parent().attr('id').substr(1),"value":this.value}));                                  
-                    } else {
-                      alert("Null values not allowed.")
-                    }
-                   }
-                 });		   
-		}		
-                          
-          } else {
-              if (item['value'] != null){		  
-		  // $(key).text(parseFloat(item['value'].toFixed(2)));
-		  $(key).text(item['value'].toString());
+      for (i in items){        
+        var item = items[i];                        
+        $("." + item['class'] + "[key='" + item['key'] + "']").each(function(){
+          if (item['value-type'] == 'float' || item['value-type'] == 'int'){
+            // Numeric             
+            if (item['class'] == 'action'){
+              $(this).html("<input type=\"number\" class=\"form-control\" value=\"" + item['value'] + "\" required>");
+              $(this).children("input:first").on("keypress", function(e) {
+                if (e.keyCode == 13 && this.value.length > 0){                  
+                    ws.send(JSON.stringify({"type":"set action","key":$(this).parent().attr('key'),"value":this.valueAsNumber}));                                  
+                }                                
+              });
             } else {
-              $(key).text("");
+              $(this).html(item['value']);
+            }            
+          } else if (item['value-type'] == 'boolean') {
+            // Checkbox        
+            $(this).html("<input data-toggle=\"toggle\" type=\"checkbox\" data-size=\"small\"" + ((item['value']==true)?'checked':'') + ">");        
+            var tog = $(this).children("input:first").bootstrapToggle();            
+            tog.bootstrapToggle((item['type']=="value")?'disable':'enable');
+            if (item['class'] == 'action'){
+              tog.change(function() {                
+                ws.send(JSON.stringify({"type":"set action","key":$(this).parent().parent().attr('key'),"value":this.checked}));                                  
+              });
+            }   
+          } else {
+            // Text
+            if (item['class'] == 'action'){
+              $(this).html("<input type=\"text\" class=\"form-control\" value=\"" + item['value'] + "\" required>");              
+              $(this).children("input:first").on("keypress", function(e) {
+                if (e.keyCode == 13 && this.value.length > 0){                  
+                    ws.send(JSON.stringify({"type":"set action","key":$(this).parent().attr('key'),"value":this.value}));                                  
+                }                                
+              });
+            } else {
+              $(this).html(item['value']);
             }
-             
           }
-        }
+        });
       }
     }; // End on message
   
-      
-
 
 
       // Navigation Buttons

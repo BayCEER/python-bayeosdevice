@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>      
+ <head>
+   <title>Items</title>     
+ </head>
+ <body>
+       {% extends "main.html" %}
+       {% block main %}
+       <div id="div_main" class="container" >
+        <div id="div_values">                   
+               <div class="row">
+                <div class="col-xs-6">CPU 1 [%]<div class="value" key="cpu1"></div></div>
+                <div class="col-xs-6">CPU 2 [%]<div class="value" key="cpu2"></div></div>
+              </div>
+        </div>
+        <div class="chart" keys="cpu1,cpu2"></div>        
+      </div>
+    {% end %}
+ </body>
+ {% block script %} 
+ <script src="{{ static_url("js/items.js") }}" type="text/javascript"></script>
+ {% end %}
+</html>
+
+
+

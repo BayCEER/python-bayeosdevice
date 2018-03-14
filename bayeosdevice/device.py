@@ -17,6 +17,20 @@ from bayeosdevice.item import SetItemHandler
 
 log = logging.getLogger(__name__)
 
+
+def getValueType(value):
+    if value is None:
+        return "none"
+    else:
+        if isinstance(value,float):
+            return "float"
+        elif isinstance(value,bool):
+            return "boolean"
+        elif isinstance(value,int):
+            return "int"       
+        else:
+            return "string"
+
 class WebSocket(WebSocketHandler):
         handlers = set()            
         def open(self):
@@ -29,7 +43,8 @@ class WebSocket(WebSocketHandler):
             log.debug("Received message:{0}".format(msg))   
             m = json.loads(msg)            
             if m['type']=='get items':
-                WebSocket.send_message(json.dumps(DeviceController.getItems()))
+                WebSocket.send_message(json.dumps(DeviceController.getActions()))
+                WebSocket.send_message(json.dumps(DeviceController.getValues()))
             elif m['type'] == 'set action':                          
                 DeviceController.actions[m['key']] = m['value']                                                  
             
@@ -59,9 +74,13 @@ class BaseHandler(RequestHandler):
 
 
 class MainHandler(BaseHandler): 
+    def initialize(self,template):
+        self.template = template        
     @tornado.web.authenticated                        
-    def get(self):        
-        self.render("items.html",items=DeviceController.getItems(), error=None)
+    def get(self): 
+
+        self.render(self.template,values=DeviceController.getValueTags(),actions=DeviceController.getActionTags(), error=None)
+  
 
 class LoginHandler(BaseHandler):
     def initialize(self, password):
@@ -83,11 +102,11 @@ class LogoutHandler(BaseHandler):
 
 class ValueHandler(SetItemHandler):
     def notify( self, key, value, event=None):        
-        WebSocket.send_message(json.dumps([{'type':'v','key':key,'value':value}]))
+        WebSocket.send_message(json.dumps([{'class':'value', 'value-type':getValueType(value),'key':key,'value':value}]))
 
 class ActionHandler(SetItemHandler):
     def notify( self, key, value, event=None):        
-        WebSocket.send_message(json.dumps([{'type':'a','key':key,'value':value}]))
+        WebSocket.send_message(json.dumps([{'class':'action','value-type':getValueType(value),'key':key,'value':value}]))
 
 
 class DeviceController(Thread):
@@ -99,29 +118,53 @@ class DeviceController(Thread):
         log.debug("Message:" + str(msg))
 
     @classmethod
-    def getItems(cls):
-        items = []                
+    def getValues(cls):
+        r = []
         for key,value in sorted(cls.values.items()):
-            items.append({'type':'v','key':key,'value':value,'unit':None})
-        for key,value in sorted(cls.actions.items()):
-            items.append({'type':'a','key':key,'value':value,'unit':None})                
+            r.append({'class':'value','value-type':getValueType(value),'key':key,'value':value})
+        return r
 
-        # Fill units
-        for item in items:            
+    @classmethod
+    def getValueTags(cls):
+        return cls.getTags(cls.values.items(),'value')
+
+    @classmethod
+    def getActionTags(cls):
+        return cls.getTags(cls.actions.items(),'action')
+
+
+    @classmethod
+    def getActions(cls):
+        r = []
+        for key,value in sorted(cls.actions.items()):
+            r.append({'class':'action','value-type':getValueType(value),'key':key,'value':value})
+        return r
+    
+    @classmethod
+    def getTags(cls, items, itemType):        
+        r = []        
+        for key,value in sorted(items):
+            i = {'key':key,'label':key}                        
             for reg, unit in cls.units.items():
-                if re.match(reg,item['key']):
-                    item['unit'] = unit                        
-        return items
+                if re.match(reg,key):                    
+                    i['label'] = key + '[' + unit + ']'                        
+            i['control'] = "<div class=\"" + itemType + "\" key=\"" + key + "\"></div>"                     
+            r.append(i)    
+        return r
 
 
     @classmethod
     def sendMessage(cls, msg):
         log.debug("Write message:" + str(msg))
         WebSocket.send_message(json.dumps(msg))
-         
+    
+    @classmethod
+    def sendError(cls,key,error):
+        log.debug("Send error message:" + str(error))
+        WebSocket.send_message(json.dumps([{'type':'e','key':key,'value':str(error)}]))         
 
-    def __init__(self, values, actions, units={}, port=80, password="bayeos"): 
-        Thread.__init__(self)             
+    def __init__(self, values, actions, units={}, port=80, password="bayeos", template="items.html"): 
+        Thread.__init__(self,name="DeviceController")             
         self.valueHandler = ValueHandler()
         values.addHandler(self.valueHandler) 
         DeviceController.values = values 
@@ -134,13 +177,13 @@ class DeviceController(Thread):
         
         self.port = port
         self.password = password 
-                         
+        self.template = template
         
 
     def run(self):        
         log.debug('Starting DeviceController')
         handlers = [
-                ("/", MainHandler),
+                ("/", MainHandler, {'template':self.template}),
                 ("/messages",WebSocket),
                 ("/login", LoginHandler, {"password":self.password}),
                 ("/logout", LogoutHandler),
@@ -161,6 +204,8 @@ class DeviceController(Thread):
     def stop(self):
         log.debug("Stopping DeviceController")
         tornado.ioloop.IOLoop.instance().stop()
+
+        
 
 
 

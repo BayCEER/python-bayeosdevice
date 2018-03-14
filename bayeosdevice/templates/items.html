@@ -20,18 +20,13 @@
                 </tr>
               </thead>
               <tbody>
-              {% for item in [i for i in items if i['type'] == 'v'] %}
+              {% for item in values %}
                   <tr>
                       <td>
-                      {% if item['unit'] %}
-                        {{ item['key'] + '[' + item['unit'] + ']'}}
-                      {% else %}
-                        {{item['key']}}
-                      {% end %}
+                        {{ item['label'] }}
                       </td>
-                      <td>
-                        <!-- This div tag is replaced by jquery on message received -->
-                        <div id="v{{ item['key'] }}"/>                        
+                      <td>                        
+                        {% raw item['control'] %}                        
                       </td>                                        
                   </tr>                        
               {% end %}
@@ -48,19 +43,10 @@
             </tr>
           </thead>
           <tbody>
-              {% for item in [i for i in items if i['type'] == 'a'] %}
+              {% for item in actions %}
               <tr>
-                 <td>
-                   {% if item['unit'] %}
-                      {{ item['key'] + '[' + item['unit'] + ']'}}
-                   {% else %}
-                      {{item['key']}}
-                   {% end %}
-                  </td>
-                  <td>
-                    <!-- This div tag is replaced by jquery on message received -->
-                    <div id="a{{ item['key'] }}"/>                                          
-                </td>            
+                 <td>{{ item['label'] }}</td>
+                <td>{% raw item['control'] %}</td>            
               </tr>                        
               {% end %}
           </tbody>
