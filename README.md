@@ -49,23 +49,21 @@ try:
 except KeyboardInterrupt:
     con.stop()
 ```
-When you run the script and open http://localhost in your browser please login with password 'bayeos'
-On a successful login the following device page is show: 
+
+- Please run the script and open http://localhost in your browser
+- Login with password 'bayeos'
+- The value pages shows your cpu loads:
 ![Values](docs/ViewValues.PNG)
- 
-You can adapt the device settings on the second tab:
+- You can adapt the device settings on the second tab:
 ![Settings](docs/ViewSettings.PNG)
  
 ## Authors 
 * **Dr. Stefan Holzheu** - *Project lead* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
-
 ## History
-
 ### Version 1.0.0, Dec 15, 2017
 - Initial release
-
 ## License
 GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1, February 1999
 
