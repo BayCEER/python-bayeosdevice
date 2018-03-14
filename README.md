@@ -21,30 +21,41 @@ Web interface based on an observable Python dictionary
 `apt-get install python-bayeosdevice`
 
 ### Example Usage 
-The following [script](docs/cpudevice.py) creates a new device to show the current cpu load on your pc. Please install the [psutils](https://pypi.python.org/pypi/psutil) before you run the example.
+The following [script](docs/cpudevice.py) creates a new device to show the current cpu load on your pc. Just run the script and open http://localhost to access it.
+
 ```python
+import time
 import psutil
+import logging
+
 from bayeosdevice.device import DeviceController
-from bayeosdevice.item import ItemDict
+from bayeosdevice.item import ItemDict, SetItemHandler
+
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG) 
+logging.getLogger('bayeosdevice.device').setLevel(logging.DEBUG)
 
 values = ItemDict({"cpu1":None,"cpu2":None})  
 units = {"^cpu":'%',"\w+time$":'secs'}      
-actions = ItemDict({"sleep_time":10, "run": True)        
+actions = ItemDict({"sleep_time":10, "run": True})        
 
 con = DeviceController(values,actions,units)
 con.start()
-while True:  
- if (actions["run"] == True):
-    cpu = psutil.cpu_percent(percpu=True)
-    values['cpu1'] = cpu[0]                                 
-    values['cpu2'] = cpu[1]                                 
-    time.sleep(actions["sleep_time"])            
-  else:
-    time.sleep(0.01)     
+
+try:
+    logging.debug("Starting device")
+    while True:  
+        if (actions["run"] == True):
+            cpu = psutil.cpu_percent(percpu=True)        
+            values['cpu1'] = cpu[0]                                 
+            values['cpu2'] = cpu[1]                                 
+            time.sleep(actions["sleep_time"])            
+        else:
+            time.sleep(0.01)     
+except KeyboardInterrupt:
+    con.stop()
+finally:
+    logging.debug("Stopped device")   
 ```
-
-The device web page can be opened on http://locahost
-
 
 
 ## Authors 
