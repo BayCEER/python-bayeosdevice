@@ -1,10 +1,16 @@
 # BayEOS Python Device UI Module
 Web interface based on an observable Python dictionary
 
-![Model View Concept](docs/mvc.png)
+## Background
+This module allows you to create a basic web interface in just a few lines of code.
+We developed it for our customers to check the state of a device and configure some main settings like switching a heating on and off or definining a target value like CO2 concentration.  
+
+The module implements a typical model-view-controller pattern (MVC):
 - Model: Observable ItemDictionary to hold device state
 - View: Dynamic generated web page for device values and settings
-- Controller: Asynchronous WebSocket event transport to push events to registered clients 
+- Controller: Asynchronous WebSocket event transport to push model change events to registered clients 
+
+![Model View Concept](docs/mvc.png)
 
 ## Getting Started
 ### Prerequisites
