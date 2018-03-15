@@ -3,12 +3,13 @@ Device web interface based on an observable Python dictionary
 
 ## Background
 This module allows you to create a basic device web interface in just a few lines of code.
-We developed it for our customers to check the state of a device and configure some main settings like switching a heating on and off or definining a target value like CO2 concentration.  
+We developed it for our customers to check the state of a device and configure some main settings like switching a heating on and off or defining a target value like CO2 concentration.  
 
 The module implements a typical model-view-controller pattern (MVC):
-- Model: Observable [ItemDictionary](bayeosdevice/item.py) to hold device state
-- View: Dynamic generated web page for device values and settings
-- Controller: Asynchronous WebSocket event transport to push model change events to registered clients 
+
+  + **Model:** Observable [ItemDictionary](bayeosdevice/item.py) to hold device state
+  + **View:**: Dynamic generated web page for device values and settings
+  + **Controller:** Asynchronous WebSocket event transport to push model change events to registered clients 
 
 ![Model View Concept](docs/mvc.png)
 
@@ -35,7 +36,7 @@ python setup.py install
 ```
 
 ### Example Usage 
-The following [script](docs/cpudevice.py) creates a new device to show the current cpu load on your pc.
+The following [script](docs/cpudevice.py) creates a new device to show the current CPU load on your pc.
 ```python
 import time
 import psutil
@@ -65,7 +66,7 @@ except KeyboardInterrupt:
 
 - Please run the script and open http://localhost in your browser
 - Login with password: bayeos
-- The value page shows your cpu loads:  
+- The value page shows your CPU loads:  
 ![Values](docs/viewvalues.png)
 - You can adapt the device settings on the second tab:  
 ![Settings](docs/viewsettings.png)
@@ -81,7 +82,11 @@ port|Embedded web server port|80
 password|Password|bayeos
 template|Template file, used to render the device web page. File must be in folder 'bayeosdevice/templates'. A blueprint for a customized template can be found in file [custom.html](bayeosdevice/templates/custom.html)|items.html  
 
-
+## Advanced Example
+The [advanced example script](docs/cpudevice_a.py) shows you how extend the simple example to:
+1. Send device values to a gateway 
+2. Start and stop a device
+3. Use a customized web page
 
 ## Authors 
 * **Dr. Stefan Holzheu** - *Project lead* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
