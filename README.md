@@ -125,9 +125,10 @@ con = DeviceController(values,actions,units,components)
 con.start()
 ```
 __User defined components on settings tab:__
+
 ![Values](docs/viewcontrols.png)
 
-For more details and a running example see [cpu_device_b.py](docs/cpu_device_b.py)
+For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py)
 
 
 
