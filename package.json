@@ -1,0 +1,27 @@
+{
+  "name": "python-bayeosdevice",
+  "version": "1.1.0",
+  "description": "Device web interface based on an observable Python dictionary",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BayCEER/python-bayeosdevice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BayCEER/python-bayeosdevice/issues"
+  },
+  "homepage": "https://github.com/BayCEER/python-bayeosdevice#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2"
+  }
+}

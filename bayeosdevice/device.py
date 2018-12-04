@@ -13,23 +13,10 @@ from threading import Thread
 from tornado.web import RequestHandler, Application
 from tornado.websocket import WebSocketClosedError, WebSocketError, WebSocketHandler
 from bayeosdevice.item import SetItemHandler
+from ConfigParser import SafeConfigParser
 
 
 log = logging.getLogger(__name__)
-
-
-def getValueType(value):
-    if value is None:
-        return "none"
-    else:
-        if isinstance(value,float):
-            return "float"
-        elif isinstance(value,bool):
-            return "boolean"
-        elif isinstance(value,int):
-            return "int"       
-        else:
-            return "string"
 
 class WebSocket(WebSocketHandler):
         handlers = set()            
@@ -42,11 +29,18 @@ class WebSocket(WebSocketHandler):
         def on_message(self, msg):            
             log.debug("Received message:{0}".format(msg))   
             m = json.loads(msg)            
-            if m['type']=='get items':
-                WebSocket.send_message(json.dumps(DeviceController.getActions()))
-                WebSocket.send_message(json.dumps(DeviceController.getValues()))
-            elif m['type'] == 'set action':                          
-                DeviceController.actions[m['key']] = m['value']                                                  
+            if m['type'] =='c':
+                WebSocket.send_message(json.dumps(DeviceController.getAllControls()))                              
+            elif m['type'] == 'a':                
+                av = DeviceController.actions
+                key = m['key']
+                if (isinstance(av[key],float)):
+                    av[key] = float(m['value'])
+                else:                
+                    av[key] = m['value']    
+
+            elif m['type'] == 'e':
+                log.error("Error message received.")
             
         def on_close(self):
             log.debug("WebSocket closed")  
@@ -78,10 +72,8 @@ class MainHandler(BaseHandler):
         self.template = template        
     @tornado.web.authenticated                        
     def get(self): 
-
         self.render(self.template,values=DeviceController.getValueTags(),actions=DeviceController.getActionTags(), error=None)
   
-
 class LoginHandler(BaseHandler):
     def initialize(self, password):
         self.password = password
@@ -101,45 +93,57 @@ class LogoutHandler(BaseHandler):
         self.redirect(self.get_argument("next", "/"))
 
 class ValueHandler(SetItemHandler):
-    def notify( self, key, value, event=None):        
-        WebSocket.send_message(json.dumps([{'class':'value', 'value-type':getValueType(value),'key':key,'value':value}]))
+    def notify( self, key, value, event=None):                
+        WebSocket.send_message(json.dumps([{'type':'v','key':key,'value':value, 'class': DeviceController.getValueControls()[key]['class']}]))
 
 class ActionHandler(SetItemHandler):
-    def notify( self, key, value, event=None):        
-        WebSocket.send_message(json.dumps([{'class':'action','value-type':getValueType(value),'key':key,'value':value}]))
+    def notify( self, key, value, event=None):                
+        WebSocket.send_message(json.dumps([{'type':'a','key':key,'value':value, 'class':DeviceController.getActionControls()[key]['class']}]))
 
+class ConfigFileHandler(SetItemHandler):
+    def __init__(self, config, file):
+        self.config = config
+        self.file = file
+        if not self.config.has_section('ACTIONS'):
+            self.config.add_section("ACTIONS")
+        
+    def notify(self, key, value, event=None):
+        self.config.set('ACTIONS',key,str(value))
+        with open(self.file, 'wb') as configfile:
+            self.config.write(configfile)
+        
 
 class DeviceController(Thread):
     values = None
     actions = None  
     units = None 
-        
+    
+    value_controls = None
+    action_controls = None
+
+            
     def logMessage(self,msg):
         log.debug("Message:" + str(msg))
+   
 
     @classmethod
-    def getValues(cls):
+    def getAllControls(cls):
         r = []
-        for key,value in sorted(cls.values.items()):
-            r.append({'class':'value','value-type':getValueType(value),'key':key,'value':value})
-        return r
+        for key,control in cls.value_controls.items():            
+            r.append({'type':'v','key':key,'value':cls.values[key],'class':control['class'],'prop':control['prop']})
+        for key,control in cls.action_controls.items():            
+            r.append({'type':'a','key':key,'value':cls.actions[key],'class':control['class'],'prop':control['prop']})
+        return r        
 
     @classmethod
     def getValueTags(cls):
-        return cls.getTags(cls.values.items(),'value')
+        return cls.getTags(cls.values.items(),'v')
 
     @classmethod
     def getActionTags(cls):
-        return cls.getTags(cls.actions.items(),'action')
+        return cls.getTags(cls.actions.items(),'a')     
 
-
-    @classmethod
-    def getActions(cls):
-        r = []
-        for key,value in sorted(cls.actions.items()):
-            r.append({'class':'action','value-type':getValueType(value),'key':key,'value':value})
-        return r
-    
+   
     @classmethod
     def getTags(cls, items, itemType):        
         r = []        
@@ -147,11 +151,10 @@ class DeviceController(Thread):
             i = {'key':key,'label':key}                        
             for reg, unit in cls.units.items():
                 if re.match(reg,key):                    
-                    i['label'] = key + '[' + unit + ']'                        
-            i['control'] = "<div class=\"" + itemType + "\" key=\"" + key + "\"></div>"                     
+                    i['label'] = key + '[' + unit + ']'                                                
+            i['control'] = "<div id=\"" + itemType + ":" + key + "\"></div>"                          
             r.append(i)    
         return r
-
 
     @classmethod
     def sendMessage(cls, msg):
@@ -159,26 +162,87 @@ class DeviceController(Thread):
         WebSocket.send_message(json.dumps(msg))
     
     @classmethod
+    def getActionControls(cls):
+        return cls.action_controls
+
+    @classmethod
+    def getValueControls(cls):
+        return cls.value_controls        
+    
+    @classmethod
     def sendError(cls,key,error):
         log.debug("Send error message:" + str(error))
         WebSocket.send_message(json.dumps([{'type':'e','key':key,'value':str(error)}]))         
 
-    def __init__(self, values, actions, units={}, port=80, password="bayeos", template="items.html"): 
-        Thread.__init__(self,name="DeviceController")             
+    def __init__(self, values, actions,units={}, components={}, configFile="", port=80, password="bayeos", template="items.html"): 
+        Thread.__init__(self,name="DeviceController")    
+
         self.valueHandler = ValueHandler()
         values.addHandler(self.valueHandler) 
         DeviceController.values = values 
+
+        if configFile != "":
+            p = SafeConfigParser()
+            if p.read(configFile):
+                for key,value in actions.items():
+                    if p.has_option("ACTIONS",key):
+                        if isinstance(value,bool):
+                            actions[key] = p.getboolean("ACTIONS",key)                        
+                        elif isinstance(value,int):
+                            actions[key] = p.getint("ACTIONS",key)                        
+                        elif isinstance(value,float):
+                            actions[key] = p.getfloat("ACTIONS",key)                        
+                        else:
+                            actions[key] = p.get("ACTIONS",key)                    
+            self.configFileHandler = ConfigFileHandler(p,configFile)
+            actions.addHandler(self.configFileHandler)
 
         self.actionHandler = ActionHandler()
         actions.addHandler(self.actionHandler) 
         DeviceController.actions = actions
         
         DeviceController.units = units
+        DeviceController.components = components
+
+        value_controls = {}
+        for key, value in values.items():
+            value_controls[key] = self.getControl(components,key,value,'v')        
+        DeviceController.value_controls = value_controls
+
+        action_controls = {}
+        for key, value in actions.items():
+            action_controls[key] = self.getControl(components,key,value,'a')                
+        DeviceController.action_controls = action_controls
         
         self.port = port
         self.password = password 
         self.template = template
         
+
+    def getControl(self, components, key, value, itemType):        
+
+        # Default types for values 
+        if (itemType == 'v'):
+             c = 'Text'
+        else:
+            # Dynamic types for actions 
+            if value is None:
+                c = 'Text'
+            else:
+                if isinstance(value,bool):
+                    c = 'Toggle'
+                elif isinstance(value,int) or isinstance(value,float):
+                    c = 'NumberInput'
+                else:
+                    c = 'TextInput'
+        d = {'class':c,'prop':{}}                    
+        # Overwrite type by configuration             
+        for reg, co in components.items():
+            if re.match(reg,key):
+                d['class'] = co['class']
+                if ('prop' in co):
+                    d['prop'] = co['prop']
+        return d;   
 
     def run(self):        
         log.debug('Starting DeviceController')
