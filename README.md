@@ -130,13 +130,14 @@ __User defined components on settings tab:__
 
 For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py)
 
-
-
 ## Authors 
 * **Dr. Stefan Holzheu** - *Project lead* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.1.1, Dec 05, 2018
+- Fixed data type changes in NumberInput and CheckBox component
+- Added validation messages for NumberInput
 ### Version 1.1.0, Nov 30, 2018
 - #1 Autosave settings in file
 - #2 User defined component elements
