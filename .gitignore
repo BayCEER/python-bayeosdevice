@@ -2,3 +2,5 @@
 target/
 .mvn/
 node_modules/
+test.py
+*.pyc

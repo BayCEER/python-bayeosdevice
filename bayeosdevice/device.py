@@ -26,22 +26,28 @@ class WebSocket(WebSocketHandler):
             log.debug("WebSocket opened")
             WebSocket.handlers.add(self)            
         
-        def on_message(self, msg):            
-            log.debug("Received message:{0}".format(msg))   
-            m = json.loads(msg)            
-            if m['type'] =='c':
-                WebSocket.send_message(json.dumps(DeviceController.getAllControls()))                              
-            elif m['type'] == 'a':                
-                av = DeviceController.actions
-                key = m['key']
-                if (isinstance(av[key],float)):
-                    av[key] = float(m['value'])
-                else:                
-                    av[key] = m['value']    
-
-            elif m['type'] == 'e':
-                log.error("Error message received.")
-            
+        def on_message(self, msg):
+            try:             
+                log.debug("Received message:{0}".format(msg))   
+                m = json.loads(msg)            
+                if m['type'] =='c':
+                    WebSocket.send_message(json.dumps(DeviceController.getAllControls()))                              
+                elif m['type'] == 'a':                
+                    av = DeviceController.actions
+                    key = m['key']
+                    if isinstance(av[key],bool):
+                        av[key] = bool(m['value'])
+                    elif isinstance(av[key],int):
+                        av[key] = int(m['value'])                    
+                    elif isinstance(av[key],float):
+                        av[key] = float(m['value'])
+                    else:                
+                        av[key] = m['value']    
+                elif m['type'] == 'e':
+                    log.error("Error message received.")
+            except:
+                log.error("Error on message:" + msg)
+                
         def on_close(self):
             log.debug("WebSocket closed")  
             WebSocket.handlers.remove(self)            

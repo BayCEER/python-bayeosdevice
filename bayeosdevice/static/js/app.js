@@ -15,7 +15,7 @@ var components = {
 $(document).ready(function () {
 
   function sendValue(key, value) {
-    // console.log("Send: {" + key + ":" + value +"}");
+    console.log("Send: {" + key + ":" + value + "}");
     ws.send(JSON.stringify({ 'type': 'a', 'key': key, 'value': value }));
   }
 

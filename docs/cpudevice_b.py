@@ -9,8 +9,8 @@ import sys, signal
 from bayeosdevice.device import DeviceController
 from bayeosdevice.item import ItemDict
 
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO) 
-logging.getLogger('bayeosdevice.device').setLevel(logging.INFO)
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG) 
+logging.getLogger('bayeosdevice.device').setLevel(logging.DEBUG)
 
 # Values
 values = ItemDict({"cpu1":None})  
@@ -20,7 +20,7 @@ units = {"^cpu":'%',"\w+time$":'secs'}
 
 # Example
 components =  {'^slider': {'class':'Slider','prop':{'min':0,'max':100,'step':10}}, '^select': {'class':'Select','prop':['high','medium','low']}, 'run': {'class':'CheckBox'},'booster':{'class':'Toggle','prop':{'text_on':'Enabled','text_off':'Disabled','width':200}}}    
-actions = ItemDict({'sleep_time':10.0, 'run': True, 'booster':False,'slider': 50, 'select': 'high','text':'Comment'})        
+actions = ItemDict({'sleep_time':10,'integer':0,'float':0.1,'run':True})
 
 con = DeviceController(values,actions,units,components,"actions.conf")
 con.start()

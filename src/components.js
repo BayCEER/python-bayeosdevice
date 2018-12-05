@@ -50,33 +50,55 @@ class NumberInput extends React.Component {
       min: props.prop.min,
       max: props.prop.max,
       step: props.prop.step ? props.prop.step: 1,
-      item_value: props.item_value      
+      item_value: props.item_value,
+      error: false,
+      message: ""
     }
     this.handleChange = this.handleChange.bind(this);
     this.keyPress = this.keyPress.bind(this);                 
   }
 
   keyPress(e){    
-    if (e.key == 'Enter' && this.state.item_value != ""){     
-      this.props.onChange(this.props.item_key, this.state.item_value);    
+
+    var nan = isNaN(parseFloat(this.state.item_value));
+    this.state.message = nan ? "Please insert a valid number.":"";
+    this.state.error = nan;
+    
+    if (e.key == 'Enter' && !nan){           
+      this.props.onChange(this.props.item_key, parseFloat(this.state.item_value));    
       e.target.blur();
-    }
+      this.state.message = "";
+      this.state.error = false;
+    } 
   }
 
-  handleChange(e){  
-      this.setState({
-        item_value: e.target.value
-      });          
+  handleChange(e){              
+        this.setState({
+          item_value: e.target.value
+        });          
   }
     
   render() {
     return (      
-      <div>
+      <div className={this.state.error ? 'has-error' : ''}>
         <input type="number" min={this.state.min} max={this.state.max} step={this.state.step} onChange={this.handleChange} onKeyPress={this.keyPress} value={this.state.item_value} className="form-control"/>                      
+        <Message message={this.state.message} error={this.state.error}/>
       </div>
     );
   }
 }
+
+ class Message extends React.Component {  
+   render(){
+    if (!this.props.error){
+      return null;
+    } else {
+      return (
+        <span class="help-block">{this.props.message}</span>
+      );
+    }
+  }
+ }
 
 
 class Slider extends React.Component {  

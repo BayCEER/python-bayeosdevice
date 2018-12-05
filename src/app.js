@@ -15,14 +15,13 @@ const components = {
 $(document).ready(function() {  
   
    function sendValue(key,value){
-    // console.log("Send: {" + key + ":" + value +"}");
+    console.log("Send: {" + key + ":" + value +"}");
     ws.send(JSON.stringify({'type':'a','key':key,'value':value}));
    }
 
     var url = "ws://" + location.host + "/messages";
     var ws = new WebSocket(url);
 
-    
     ws.onopen = function() {
       //console.log("WS opened.");        
       ws.send('{"type":"c"}');      

@@ -88,7 +88,9 @@ var NumberInput = function (_React$Component3) {
       min: props.prop.min,
       max: props.prop.max,
       step: props.prop.step ? props.prop.step : 1,
-      item_value: props.item_value
+      item_value: props.item_value,
+      error: false,
+      message: ""
     };
     _this3.handleChange = _this3.handleChange.bind(_this3);
     _this3.keyPress = _this3.keyPress.bind(_this3);
@@ -98,9 +100,16 @@ var NumberInput = function (_React$Component3) {
   _createClass(NumberInput, [{
     key: 'keyPress',
     value: function keyPress(e) {
-      if (e.key == 'Enter' && this.state.item_value != "") {
-        this.props.onChange(this.props.item_key, this.state.item_value);
+
+      var nan = isNaN(parseFloat(this.state.item_value));
+      this.state.message = nan ? "Please insert a valid number." : "";
+      this.state.error = nan;
+
+      if (e.key == 'Enter' && !nan) {
+        this.props.onChange(this.props.item_key, parseFloat(this.state.item_value));
         e.target.blur();
+        this.state.message = "";
+        this.state.error = false;
       }
     }
   }, {
@@ -115,8 +124,9 @@ var NumberInput = function (_React$Component3) {
     value: function render() {
       return React.createElement(
         'div',
-        null,
-        React.createElement('input', { type: 'number', min: this.state.min, max: this.state.max, step: this.state.step, onChange: this.handleChange, onKeyPress: this.keyPress, value: this.state.item_value, className: 'form-control' })
+        { className: this.state.error ? 'has-error' : '' },
+        React.createElement('input', { type: 'number', min: this.state.min, max: this.state.max, step: this.state.step, onChange: this.handleChange, onKeyPress: this.keyPress, value: this.state.item_value, className: 'form-control' }),
+        React.createElement(Message, { message: this.state.message, error: this.state.error })
       );
     }
   }]);
@@ -124,21 +134,48 @@ var NumberInput = function (_React$Component3) {
   return NumberInput;
 }(React.Component);
 
-var Slider = function (_React$Component4) {
-  _inherits(Slider, _React$Component4);
+var Message = function (_React$Component4) {
+  _inherits(Message, _React$Component4);
+
+  function Message() {
+    _classCallCheck(this, Message);
+
+    return _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
+  }
+
+  _createClass(Message, [{
+    key: 'render',
+    value: function render() {
+      if (!this.props.error) {
+        return null;
+      } else {
+        return React.createElement(
+          'span',
+          { 'class': 'help-block' },
+          this.props.message
+        );
+      }
+    }
+  }]);
+
+  return Message;
+}(React.Component);
+
+var Slider = function (_React$Component5) {
+  _inherits(Slider, _React$Component5);
 
   function Slider(props) {
     _classCallCheck(this, Slider);
 
-    var _this4 = _possibleConstructorReturn(this, (Slider.__proto__ || Object.getPrototypeOf(Slider)).call(this, props));
+    var _this5 = _possibleConstructorReturn(this, (Slider.__proto__ || Object.getPrototypeOf(Slider)).call(this, props));
 
-    _this4.handleChange = _this4.handleChange.bind(_this4);
-    _this4.state = {
+    _this5.handleChange = _this5.handleChange.bind(_this5);
+    _this5.state = {
       min: props.prop.min,
       max: props.prop.max,
       step: props.prop.step
     };
-    return _this4;
+    return _this5;
   }
 
   _createClass(Slider, [{
@@ -170,26 +207,26 @@ var Slider = function (_React$Component4) {
   return Slider;
 }(React.Component);
 
-var Select = function (_React$Component5) {
-  _inherits(Select, _React$Component5);
+var Select = function (_React$Component6) {
+  _inherits(Select, _React$Component6);
 
   function Select(props) {
     _classCallCheck(this, Select);
 
-    var _this5 = _possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
+    var _this6 = _possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
 
-    _this5.handleChange = _this5.handleChange.bind(_this5);
-    var ops = _this5.props.prop.map(function (value) {
+    _this6.handleChange = _this6.handleChange.bind(_this6);
+    var ops = _this6.props.prop.map(function (value) {
       return React.createElement(
         'option',
         { value: value, key: value },
         value
       );
     });
-    _this5.state = {
+    _this6.state = {
       options: ops
     };
-    return _this5;
+    return _this6;
   }
 
   _createClass(Select, [{
@@ -216,22 +253,22 @@ var Select = function (_React$Component5) {
   return Select;
 }(React.Component);
 
-var Toggle = function (_React$Component6) {
-  _inherits(Toggle, _React$Component6);
+var Toggle = function (_React$Component7) {
+  _inherits(Toggle, _React$Component7);
 
   function Toggle(props) {
     _classCallCheck(this, Toggle);
 
-    var _this6 = _possibleConstructorReturn(this, (Toggle.__proto__ || Object.getPrototypeOf(Toggle)).call(this, props));
+    var _this7 = _possibleConstructorReturn(this, (Toggle.__proto__ || Object.getPrototypeOf(Toggle)).call(this, props));
 
-    _this6.state = {
+    _this7.state = {
       text_on: props.prop.text_on ? props.prop.text_on : "On",
       text_off: props.prop.text_off ? props.prop.text_off : "Off",
       width: props.prop.width ? props.prop.width : 58,
       height: props.prop.height ? props.prop.height : 34
     };
-    _this6.handleChange = _this6.handleChange.bind(_this6);
-    return _this6;
+    _this7.handleChange = _this7.handleChange.bind(_this7);
+    return _this7;
   }
 
   _createClass(Toggle, [{
@@ -270,16 +307,16 @@ var Toggle = function (_React$Component6) {
   return Toggle;
 }(React.Component);
 
-var CheckBox = function (_React$Component7) {
-  _inherits(CheckBox, _React$Component7);
+var CheckBox = function (_React$Component8) {
+  _inherits(CheckBox, _React$Component8);
 
   function CheckBox(props) {
     _classCallCheck(this, CheckBox);
 
-    var _this7 = _possibleConstructorReturn(this, (CheckBox.__proto__ || Object.getPrototypeOf(CheckBox)).call(this, props));
+    var _this8 = _possibleConstructorReturn(this, (CheckBox.__proto__ || Object.getPrototypeOf(CheckBox)).call(this, props));
 
-    _this7.handleChange = _this7.handleChange.bind(_this7);
-    return _this7;
+    _this8.handleChange = _this8.handleChange.bind(_this8);
+    return _this8;
   }
 
   _createClass(CheckBox, [{
