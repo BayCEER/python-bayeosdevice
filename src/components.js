@@ -14,10 +14,24 @@ class TextInput extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      item_value: props.item_value
+      item_value: null
     }
     this.keyPress = this.keyPress.bind(this);                 
     this.handleChange = this.handleChange.bind(this); 
+    this.onBlur = this.onBlur.bind(this);  
+  }
+
+  keyPress(e){    
+    if (e.key == 'Enter'){
+        this.props.onChange(this.props.item_key, e.target.value);    
+        e.target.blur();
+    }
+  }
+
+  onBlur(e){
+    this.setState(
+      { item_value: null}
+    );
   }
 
   handleChange(e){    
@@ -26,17 +40,11 @@ class TextInput extends React.Component {
     });          
   }
   
-  keyPress(e){    
-    if (e.key == 'Enter' && this.state.item_value != ""){
-        this.props.onChange(this.props.item_key, this.state.item_value);    
-        e.target.blur();
-    }
-  }
-  
-   render() {
+  render() {
+    var value = this.state.item_value != null ? this.state.item_value:this.props.item_value;
     return (
       <div>
-        <input type="text" onChange={this.handleChange} onKeyPress={this.keyPress} value={this.state.item_value} className="form-control"></input>
+        <input type="text" onChange={this.handleChange} onKeyPress={this.keyPress}  onBlur={this.onBlur} value={value} className="form-control"></input>
       </div>
     );
   }
@@ -50,39 +58,45 @@ class NumberInput extends React.Component {
       min: props.prop.min,
       max: props.prop.max,
       step: props.prop.step ? props.prop.step: 1,
-      item_value: props.item_value,
-      error: false,
-      message: ""
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.keyPress = this.keyPress.bind(this);                 
+      item_value: null
+    }    
+    this.keyPress = this.keyPress.bind(this);    
+    this.onChange = this.onChange.bind(this);    
+    this.onBlur = this.onBlur.bind(this);    
   }
 
-  keyPress(e){    
-
-    var nan = isNaN(parseFloat(this.state.item_value));
-    this.state.message = nan ? "Please insert a valid number.":"";
-    this.state.error = nan;
-    
-    if (e.key == 'Enter' && !nan){           
-      this.props.onChange(this.props.item_key, parseFloat(this.state.item_value));    
-      e.target.blur();
-      this.state.message = "";
-      this.state.error = false;
+  keyPress(e){   
+    // console.log("keyPress:" + e.target.value);
+    if (e.key == 'Enter' && !isNaN(e.target.value)){               
+      this.props.onChange(this.props.item_key, parseFloat(e.target.value));        
+      e.target.blur();                  
     } 
   }
 
-  handleChange(e){              
-        this.setState({
-          item_value: e.target.value
-        });          
+  onBlur(e){
+    this.setState(
+      { item_value: null}
+    );
   }
-    
+
+  onChange(e){
+    // console.log("onChange");
+    this.setState(
+      { item_value: e.target.value}
+    );
+  }
+
   render() {
+    // console.log("render");
+    var value = this.state.item_value != null ? this.state.item_value:this.props.item_value;
+    var error = isNaN(parseFloat(value));
+    var message = error ? 'Please insert a valid number.':'';    
+    var className = error ? 'has-error':'';
     return (      
-      <div className={this.state.error ? 'has-error' : ''}>
-        <input type="number" min={this.state.min} max={this.state.max} step={this.state.step} onChange={this.handleChange} onKeyPress={this.keyPress} value={this.state.item_value} className="form-control"/>                      
-        <Message message={this.state.message} error={this.state.error}/>
+      <div className={className}>
+        <input type="number" min={this.state.min} max={this.state.max} step={this.state.step} 
+        onChange={this.onChange} onKeyPress={this.keyPress} onBlur={this.onBlur} value={value} className="form-control"/>                      
+        <Message message={message} error={error}/>
       </div>
     );
   }

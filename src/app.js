@@ -37,7 +37,7 @@ $(document).ready(function() {
     }
   
     ws.onmessage = function (evt) {       
-      // console.log("Received Message:" + evt.data);
+      console.log("Received Message:" + evt.data);
       var items = JSON.parse(evt.data);        
       var i;
       var onChange = sendValue.bind(this);

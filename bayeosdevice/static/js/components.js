@@ -40,14 +40,28 @@ var TextInput = function (_React$Component2) {
     var _this2 = _possibleConstructorReturn(this, (TextInput.__proto__ || Object.getPrototypeOf(TextInput)).call(this, props));
 
     _this2.state = {
-      item_value: props.item_value
+      item_value: null
     };
     _this2.keyPress = _this2.keyPress.bind(_this2);
     _this2.handleChange = _this2.handleChange.bind(_this2);
+    _this2.onBlur = _this2.onBlur.bind(_this2);
     return _this2;
   }
 
   _createClass(TextInput, [{
+    key: 'keyPress',
+    value: function keyPress(e) {
+      if (e.key == 'Enter') {
+        this.props.onChange(this.props.item_key, e.target.value);
+        e.target.blur();
+      }
+    }
+  }, {
+    key: 'onBlur',
+    value: function onBlur(e) {
+      this.setState({ item_value: null });
+    }
+  }, {
     key: 'handleChange',
     value: function handleChange(e) {
       this.setState({
@@ -55,20 +69,13 @@ var TextInput = function (_React$Component2) {
       });
     }
   }, {
-    key: 'keyPress',
-    value: function keyPress(e) {
-      if (e.key == 'Enter' && this.state.item_value != "") {
-        this.props.onChange(this.props.item_key, this.state.item_value);
-        e.target.blur();
-      }
-    }
-  }, {
     key: 'render',
     value: function render() {
+      var value = this.state.item_value != null ? this.state.item_value : this.props.item_value;
       return React.createElement(
         'div',
         null,
-        React.createElement('input', { type: 'text', onChange: this.handleChange, onKeyPress: this.keyPress, value: this.state.item_value, className: 'form-control' })
+        React.createElement('input', { type: 'text', onChange: this.handleChange, onKeyPress: this.keyPress, onBlur: this.onBlur, value: value, className: 'form-control' })
       );
     }
   }]);
@@ -88,45 +95,48 @@ var NumberInput = function (_React$Component3) {
       min: props.prop.min,
       max: props.prop.max,
       step: props.prop.step ? props.prop.step : 1,
-      item_value: props.item_value,
-      error: false,
-      message: ""
+      item_value: null
     };
-    _this3.handleChange = _this3.handleChange.bind(_this3);
     _this3.keyPress = _this3.keyPress.bind(_this3);
+    _this3.onChange = _this3.onChange.bind(_this3);
+    _this3.onBlur = _this3.onBlur.bind(_this3);
     return _this3;
   }
 
   _createClass(NumberInput, [{
     key: 'keyPress',
     value: function keyPress(e) {
-
-      var nan = isNaN(parseFloat(this.state.item_value));
-      this.state.message = nan ? "Please insert a valid number." : "";
-      this.state.error = nan;
-
-      if (e.key == 'Enter' && !nan) {
-        this.props.onChange(this.props.item_key, parseFloat(this.state.item_value));
+      // console.log("keyPress:" + e.target.value);
+      if (e.key == 'Enter' && !isNaN(e.target.value)) {
+        this.props.onChange(this.props.item_key, parseFloat(e.target.value));
         e.target.blur();
-        this.state.message = "";
-        this.state.error = false;
       }
     }
   }, {
-    key: 'handleChange',
-    value: function handleChange(e) {
-      this.setState({
-        item_value: e.target.value
-      });
+    key: 'onBlur',
+    value: function onBlur(e) {
+      this.setState({ item_value: null });
+    }
+  }, {
+    key: 'onChange',
+    value: function onChange(e) {
+      // console.log("onChange");
+      this.setState({ item_value: e.target.value });
     }
   }, {
     key: 'render',
     value: function render() {
+      // console.log("render");
+      var value = this.state.item_value != null ? this.state.item_value : this.props.item_value;
+      var error = isNaN(parseFloat(value));
+      var message = error ? 'Please insert a valid number.' : '';
+      var className = error ? 'has-error' : '';
       return React.createElement(
         'div',
-        { className: this.state.error ? 'has-error' : '' },
-        React.createElement('input', { type: 'number', min: this.state.min, max: this.state.max, step: this.state.step, onChange: this.handleChange, onKeyPress: this.keyPress, value: this.state.item_value, className: 'form-control' }),
-        React.createElement(Message, { message: this.state.message, error: this.state.error })
+        { className: className },
+        React.createElement('input', { type: 'number', min: this.state.min, max: this.state.max, step: this.state.step,
+          onChange: this.onChange, onKeyPress: this.keyPress, onBlur: this.onBlur, value: value, className: 'form-control' }),
+        React.createElement(Message, { message: message, error: error })
       );
     }
   }]);

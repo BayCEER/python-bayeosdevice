@@ -20,7 +20,7 @@ for root, dirs, files in os.walk(start_point):
 
 
 setup(name='python-bayeosdevice',
-      version='1.1.1',
+      version='1.1.3',
       classifiers=['Programming Language :: Python'], 
       description='Python BayEOS Device Web Library',
       url='http://github.com/BayCEER/python-bayeosdevice',
