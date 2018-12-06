@@ -135,6 +135,8 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.1.3, Dec 06, 2018
+- Fixed action value updates
 ### Version 1.1.1, Dec 05, 2018
 - Fixed data type changes in NumberInput and CheckBox component
 - Added validation messages for NumberInput
