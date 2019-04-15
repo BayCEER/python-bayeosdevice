@@ -7,11 +7,8 @@
        {% extends "main.html" %}
        {% block main %}
        <div id="div_main" class="container" >
-        <div id="div_values">
-          
-         
-        <div class="pull-left"><h3>Values</h3></div>
-        
+        <div id="div_values">                   
+        <div class="pull-left"><h3>Values</h3></div>        
         <table class="table table-bordered table-condensed table-striped">
               <thead>
                 <tr>
@@ -33,6 +30,13 @@
               </tbody>
         </table>
         </div>
+
+        <div id="div_charts" style="display: none;">   
+          <h3>Value Chart</h3>
+          <div id="chart"></div>
+        </div>
+
+        
         <div id="div_settings" style="display: none;">
         <h3>Settings</h3>                  
        <table class="table table-bordered table-condensed">

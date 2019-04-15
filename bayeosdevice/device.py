@@ -135,9 +135,9 @@ class DeviceController(Thread):
     @classmethod
     def getAllControls(cls):
         r = []
-        for key,control in cls.value_controls.items():            
+        for key,control in sorted(cls.value_controls.items()):            
             r.append({'type':'v','key':key,'value':cls.values[key],'class':control['class'],'prop':control['prop']})
-        for key,control in cls.action_controls.items():            
+        for key,control in sorted(cls.action_controls.items()):            
             r.append({'type':'a','key':key,'value':cls.actions[key],'class':control['class'],'prop':control['prop']})
         return r        
 

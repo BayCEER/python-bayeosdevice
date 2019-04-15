@@ -1,1 +1,0 @@
-npx babel --watch src --out-dir .\bayeosdevice\static\js --presets react-app/prod

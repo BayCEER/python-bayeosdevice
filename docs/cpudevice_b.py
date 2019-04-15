@@ -20,7 +20,7 @@ units = {"^cpu":'%',"\w+time$":'secs'}
 
 # Example
 components =  {'^slider': {'class':'Slider','prop':{'min':0,'max':100,'step':10}}, '^select': {'class':'Select','prop':['high','medium','low']}, 'run': {'class':'CheckBox'},'booster':{'class':'Toggle','prop':{'text_on':'Enabled','text_off':'Disabled','width':200}}}    
-actions = ItemDict({'sleep_time':10,'integer':0,'float':0.1,'run':True})
+actions = ItemDict({'slider':50,'select':'high', 'run':True, 'booster':False, 'sleep_time':10.0,'text':'Comment'})
 
 con = DeviceController(values,actions,units,components,"actions.conf")
 con.start()
@@ -31,6 +31,7 @@ def sigterm_handler(_signo, _stack_frame):
     if con is not None:
         con.stop()    
     sys.exit(0) 
+
 signal.signal(signal.SIGTERM, sigterm_handler) 
 signal.signal(signal.SIGINT, sigterm_handler)
 
