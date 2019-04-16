@@ -64,10 +64,13 @@ except KeyboardInterrupt:
 ```
 
 - Please run the script and open http://localhost in your browser
-- Login with password: bayeos
-- The value page shows your CPU loads:  
+- Login with password: bayeos and navigate to the Values, Value Chart or Settings page.
+- The UI is automatically refreshed whenever a value or setting is changed on the device.
+- The __Values__ page shows your CPU loads:  
 ![Values](docs/viewvalues.png)
-- You can adapt the device settings on the second tab:  
+- Time series of all values are shown on the __Value Chart__ page:
+![Chart](docs/viewchart.png)
+- You can adapt the device settings on the __Settings__ page:  
 ![Settings](docs/viewsettings.png)
 
 The DeviceController can be customized by the following constructor arguments:
