@@ -68,7 +68,7 @@ except KeyboardInterrupt:
 - The UI is automatically refreshed whenever a value or setting is changed on the device.
 - The __Values__ page shows your CPU loads:  
 ![Values](docs/viewvalues.png)
-- Time series of all values are shown on the __Value Chart__ page:
+- A value chart is created on the __Value Chart__ page:
 ![Chart](docs/viewchart.png)
 - You can adapt the device settings on the __Settings__ page:  
 ![Settings](docs/viewsettings.png)
