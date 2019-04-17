@@ -138,6 +138,8 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.2.1, Apr 17, 2019
+- Number formatting on value page 
 ### Version 1.2.0, Apr 08, 2019
 - New value chart tab based on [Highcharts](https://www.highcharts.com/)
 ### Version 1.1.3, Dec 06, 2018
