@@ -138,6 +138,10 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.2.2, July 7, 2019
+- Item.SetItemHandler changed to fire new and old values on set item
+- Device.Values dictionary fires always on set item
+- Device.Action dictionary fires on set item  when value changed only 
 ### Version 1.2.1, Apr 17, 2019
 - Number formatting on value page 
 ### Version 1.2.0, Apr 08, 2019

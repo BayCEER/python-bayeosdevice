@@ -99,12 +99,15 @@ class LogoutHandler(BaseHandler):
         self.redirect(self.get_argument("next", "/"))
 
 class ValueHandler(SetItemHandler):
-    def notify( self, key, value, event=None):                
-        WebSocket.send_message(json.dumps([{'type':'v','key':key,'value':value, 'class': DeviceController.getValueControls()[key]['class']}]))
+    def notify( self, key, newValue, oldValue, event=None):                
+        WebSocket.send_message(json.dumps([{'type':'v','key':key,'value':newValue, 'class': DeviceController.getValueControls()[key]['class']}]))
 
 class ActionHandler(SetItemHandler):
-    def notify( self, key, value, event=None):                
-        WebSocket.send_message(json.dumps([{'type':'a','key':key,'value':value, 'class':DeviceController.getActionControls()[key]['class']}]))
+    def notify( self, key, newValue, oldValue, event=None):  
+        if event=="U" and newValue == oldValue:
+            return
+        else:               
+            WebSocket.send_message(json.dumps([{'type':'a','key':key,'value':newValue, 'class':DeviceController.getActionControls()[key]['class']}]))
 
 class ConfigFileHandler(SetItemHandler):
     def __init__(self, config, file):

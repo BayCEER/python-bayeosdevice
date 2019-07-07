@@ -12,19 +12,18 @@ class __itemDict__( type ):
             def wrapper( *args, **kwargs ):
                 instance, key, newVal = args[0], args[1], args[2]                                               
                 if key in instance:
-                    if instance[key] != newVal:
-                        instance.notifyHandlers(key=key, value=newVal, event="U")            
+                    instance.notifyHandlers(key=key, newValue=newVal, oldValue=instance[key], event="U")            
                 else:
-                    instance.notifyHandlers(key=key, value=newVal, event="N")        
+                    instance.notifyHandlers(key=key, newValue=newVal, oldValue=None, event="N")        
                 return func( *args, **kwargs )
             return wrapper
         def addHandler( self, handler):
             self.handlers().add(handler)
         def removeHandler( self, handler ):
             self.handlers().remove(handler)
-        def notifyHandlers( self, key=None, value=None, event=None ):
+        def notifyHandlers( self, key=None, newValue=None, oldValue=None, event=None ):
             for h in self.handlers():
-                h.notify(key,value,event)        
+                h.notify(key,newValue,oldValue,event)        
         classdict["handlers"] = handlers
         classdict["addHandler"] = addHandler
         classdict["removeHandler"] = removeHandler
@@ -35,11 +34,12 @@ class __itemDict__( type ):
 
 class SetItemHandler( object ):
     """" Handles set item events """
-    def notify( self, key, value, event):
+    def notify( self, key, newValue, oldValue, event):
         raise NotImplementedError("must be implemented by subclass")
 
 class ItemDict(dict):
     """" A dictionary which fires set item events on registered handlers"""
-    __metaclass__ = __itemDict__ 
+    __metaclass__ = __itemDict__
+   
      
        
