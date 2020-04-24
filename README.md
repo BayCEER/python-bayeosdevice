@@ -138,6 +138,8 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.2.3, April, 2020
+- Fixed bug in config file handler 
 ### Version 1.2.2, July 7, 2019
 - Item.SetItemHandler changed to fire new and old values on set item
 - Device.Values dictionary fires always on set item

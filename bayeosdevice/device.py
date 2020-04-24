@@ -27,7 +27,7 @@ class WebSocket(WebSocketHandler):
             WebSocket.handlers.add(self)            
         
         def on_message(self, msg):
-            try:             
+            # try:             
                 log.debug("Received message:{0}".format(msg))   
                 m = json.loads(msg)            
                 if m['type'] =='c':
@@ -45,8 +45,8 @@ class WebSocket(WebSocketHandler):
                         av[key] = m['value']    
                 elif m['type'] == 'e':
                     log.error("Error message received.")
-            except:
-                log.error("Error on message:" + msg)
+            # except:
+            #    log.error("Error on message:" + msg)
                 
         def on_close(self):
             log.debug("WebSocket closed")  
@@ -116,8 +116,8 @@ class ConfigFileHandler(SetItemHandler):
         if not self.config.has_section('ACTIONS'):
             self.config.add_section("ACTIONS")
         
-    def notify(self, key, value, event=None):
-        self.config.set('ACTIONS',key,str(value))
+    def notify(self, key, newValue, oldValue, event=None):
+        self.config.set('ACTIONS',key,str(newValue))
         with open(self.file, 'wb') as configfile:
             self.config.write(configfile)
         
