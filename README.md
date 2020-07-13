@@ -105,7 +105,7 @@ __Defintions__
 __Sample__
 
 ```Python
-# Example (formated for better readability)
+# Example (formatted for better readability)
 actions = ItemDict(
     {
     'slider': 50, 
@@ -138,12 +138,14 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.2.4, July, 2020
+- Treat all number settings in config file as float
 ### Version 1.2.3, April, 2020
 - Fixed bug in config file handler 
 ### Version 1.2.2, July 7, 2019
 - Item.SetItemHandler changed to fire new and old values on set item
 - Device.Values dictionary fires always on set item
-- Device.Action dictionary fires on set item  when value changed only 
+- Device.Action dictionary fires on set item when value changed only 
 ### Version 1.2.1, Apr 17, 2019
 - Number formatting on value page 
 ### Version 1.2.0, Apr 08, 2019

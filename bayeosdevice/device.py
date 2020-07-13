@@ -197,9 +197,7 @@ class DeviceController(Thread):
                     if p.has_option("ACTIONS",key):
                         if isinstance(value,bool):
                             actions[key] = p.getboolean("ACTIONS",key)                        
-                        elif isinstance(value,int):
-                            actions[key] = p.getint("ACTIONS",key)                        
-                        elif isinstance(value,float):
+                        elif isinstance(value,(int,float)):
                             actions[key] = p.getfloat("ACTIONS",key)                        
                         else:
                             actions[key] = p.get("ACTIONS",key)                    
@@ -240,7 +238,7 @@ class DeviceController(Thread):
             else:
                 if isinstance(value,bool):
                     c = 'Toggle'
-                elif isinstance(value,int) or isinstance(value,float):
+                elif isinstance(value,(int,float)):
                     c = 'NumberInput'
                 else:
                     c = 'TextInput'
