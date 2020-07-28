@@ -6,4 +6,4 @@ test.py
 *.pyc
 .classpath
 .project
-bin/
+bin

@@ -8,6 +8,8 @@ import socket
 import json
 import os
 import re
+import datetime
+
 
 from threading import Thread
 from tornado.web import RequestHandler, Application
@@ -129,7 +131,7 @@ class DeviceController(Thread):
     
     value_controls = None
     action_controls = None
-
+    iol = None
             
     def logMessage(self,msg):
         log.debug("Message:" + str(msg))
@@ -269,15 +271,18 @@ class DeviceController(Thread):
         
         application = Application(handlers,**settings)        
         http_server = tornado.httpserver.HTTPServer(application)
-        http_server.listen(self.port)           
-        tornado.ioloop.IOLoop.instance().start()  
+        http_server.listen(self.port)  
+        self.iol = tornado.ioloop.IOLoop.current()
+        self.iol.start()
+        http_server.stop()
+        log.debug("Web server stopped")  
+
 
     def stop(self):
         log.debug("Stopping DeviceController")
-        tornado.ioloop.IOLoop.instance().stop()
-
-        
-
+        self.iol.add_callback(self.iol.stop)
+    
+         
 
 
 

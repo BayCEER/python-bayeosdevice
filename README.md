@@ -138,6 +138,8 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.3.0, July, 2020
+- Stop tornado web server on DeviceController.stop()
 ### Version 1.2.4, July, 2020
 - Treat all number settings in config file as float
 ### Version 1.2.3, April, 2020
