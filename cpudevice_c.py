@@ -8,11 +8,19 @@ from bayeosdevice.item import ItemDict
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG) 
 logging.getLogger('bayeosdevice.device').setLevel(logging.DEBUG)
 
-values = ItemDict({"cpu1":None,"cpu2":None})  
+
+img1 = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+img2 = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+
+values = ItemDict({"cpu1":None,"cpu2":None, "cam1":img1, "cam2":img2})  
 units = {"^cpu":'%',"\w+time$":'secs'}      
 actions = ItemDict({"sleep_time":10, "run": True})        
 
-con = DeviceController(values,actions,units)
+components =  {
+    '^cam': {'class':'Image','prop':{'alt':'Web Camera'}}, 
+ }    
+
+con = DeviceController(values,actions,units,components)
 con.start()
 
 try:

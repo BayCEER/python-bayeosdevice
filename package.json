@@ -1,6 +1,6 @@
 {
   "name": "python-bayeosdevice",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Device web interface based on an observable Python dictionary",
   "private": true,
   "directories": {
@@ -21,17 +21,17 @@
   },
   "homepage": "https://github.com/BayCEER/python-bayeosdevice#readme",
   "dependencies": {
-    "highcharts": "^7.1.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "highcharts": "^7.2.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.5",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   },
   "optionalDependencies": {
     "fsevents": "*"

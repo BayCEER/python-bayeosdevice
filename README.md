@@ -95,11 +95,12 @@ __Defintions__
 ```Python
 {'class':'Text'} // Text as label
 {'class':'TextInput'} // Text input
-{'class':'NumberInput','prop':{min:0,'max':100,'step':1}} // Float and Integer input values 
-{'class':'Slider','prop':{min:0,'max':100,'step':1}} // Slider 
+{'class':'NumberInput','prop':{'min':0,'max':100,'step':1}} // Float and Integer input values 
+{'class':'Slider','prop':{'min':0,'max':100,'step':1}} // Slider 
 {'class':'Select','prop':['option1','option2']}} 
-{'class':'Toggle','prop':{text_on:'On','text_off':'Off','width':100}}
+{'class':'Toggle','prop':{'text_on':'On','text_off':'Off','width':100}}
 {'class':'CheckBox'}
+{'class':'Image','prop':{'alt':'Image desc','width':100,'height':100}}
 ```
 
 __Sample__
@@ -138,6 +139,10 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 * **Oliver Archner** - *Programmer* - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+### Version 1.4.0, Oct, 2020
+- Support for base64 images in model
+- Hide/Show all series buttons 
+- Highcharts error on login/logout fixed
 ### Version 1.3.0, July, 2020
 - Stop tornado web server on DeviceController.stop()
 ### Version 1.2.4, July, 2020
@@ -163,5 +168,5 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 ### Version 1.0.0, Dec 15, 2017
 - Initial release
 ## License
-GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1, February 1999
+GNU LESSER GENERAL PUBLIC LICENSE, Version 3,
 

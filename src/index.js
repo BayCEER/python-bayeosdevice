@@ -9,6 +9,7 @@ import { CheckBox } from "./components/checkbox";
 import { Select } from "./components/select";
 import { Slider } from "./components/slider";
 import { Toggle } from "./components/toggle";
+import { Image } from "./components/image";
 import Highcharts from "highcharts";
 
 /* String to class map */
@@ -19,7 +20,8 @@ const components = {
   CheckBox: CheckBox,
   Select: Select,
   Slider: Slider,
-  Toggle: Toggle
+  Toggle: Toggle,
+  Image: Image
 };
 
 const MAX_DATA = 100;
@@ -28,34 +30,36 @@ Highcharts.setOptions({
       useUTC: false
   }
 });
-var chart = Highcharts.chart('chart', {    
-  chart: {
-      // FireFox Bug 
-      animation: false
-  },
-  title: {
-    text: ''
-  },     
-  xAxis: {
-      type: 'datetime',
-      title: {
-        text: 'Date',
-        margin: 10
-      }        
-  },
-  yAxis: {
-      minPadding: 0.2,
-      maxPadding: 0.2,
-      title: {
-          text: 'Value',
-          margin: 10
-      }
-  }
-}); 
+
 var keys = [];
 const sections = ['values', 'charts', 'settings'];
 
 $(document).ready(function () {
+
+  var chart = Highcharts.chart('chart', {    
+    chart: {
+        // FireFox Bug 
+        animation: false
+    },
+    title: {
+      text: ''
+    },     
+    xAxis: {
+        type: 'datetime',
+        title: {
+          text: 'Date',
+          margin: 10
+        }        
+    },
+    yAxis: {
+        minPadding: 0.2,
+        maxPadding: 0.2,
+        title: {
+            text: 'Value',
+            margin: 10
+        }
+    }
+  }); 
 
   function sendValue(key, value) {
     console.log("Send: {" + key + ":" + value + "}");
@@ -91,7 +95,8 @@ $(document).ready(function () {
       }
       var node = document.getElementById(item.type + ":" + item.key);
       ReactDOM.render(React.createElement(components[item.class], container), node);
-      if (item.type == 'v'){
+      
+      if (item.type == 'v' && !Number.isNaN(Number.parseFloat(item.value))){ 
         var rec = [date,item.value];
         if (!keys.includes(item.key)){
           chart.addSeries({name: item.key});
@@ -118,6 +123,7 @@ $(document).ready(function () {
   $("#nav_settings").click(function () {
     activateSection("settings");
   });
+  
 
   function activateSection(nav) {
     sections.forEach(sec => {
@@ -130,6 +136,21 @@ $(document).ready(function () {
       }
     });
   }
+
+  $("#hs_series").click(function () {
+    if("Hide series"==$(this).val()){
+      $(chart.series).each(function(){
+        this.setVisible(!1,!1)
+        });
+      chart.redraw(),
+      $(this).val("Show series") 
+    } else {
+     $(chart.series).each(function(){
+       this.setVisible(!0,!1)});
+     chart.redraw(),
+     $(this).val("Hide series") 
+    } 
+  });
 
   
 
