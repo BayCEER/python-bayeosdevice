@@ -10,9 +10,9 @@ logging.getLogger('bayeosdevice.device').setLevel(logging.DEBUG)
 
 values = ItemDict({"cpu1":None,"cpu2":None})  
 units = {"^cpu":'%',"\w+time$":'secs'}      
-actions = ItemDict({"sleep_time":10, "run": True})        
+actions = ItemDict({"sleep_time":10, "run": True, "message":"Hello"})        
 
-con = DeviceController(values,actions,units)
+con = DeviceController(values,actions,units,configFile="cpudevice.conf")
 con.start()
 
 try:
