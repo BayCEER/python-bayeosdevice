@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/BayCEER/python-bayeosdevice#readme",
   "dependencies": {
-    "highcharts": "^7.2.2",
+    "highcharts": "^9.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
