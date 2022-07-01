@@ -1,6 +1,6 @@
 {
   "name": "python-bayeosdevice",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Device web interface based on an observable Python dictionary",
   "private": true,
   "directories": {

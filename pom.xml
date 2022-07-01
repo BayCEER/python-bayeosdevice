@@ -1,10 +1,11 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.unibayreuth.bayceer</groupId>
-	<artifactId>python-bayeosdevice</artifactId>
-	<version>1.4.2</version>
+	<artifactId>python3-bayeosdevice</artifactId>
+	<version>1.4.3</version>
 	<properties>
 		<name>python-bayeosdevice</name>
+		<release>bullseye</release>
 	</properties>
 	<build>
 		<plugins>
@@ -19,7 +20,7 @@
 							<goal>jdeb</goal>
 						</goals>
 						<configuration>
-							<deb>${project.build.directory}/${project.artifactId}-${project.version}.deb</deb>
+							<deb>${project.build.directory}/${project.artifactId}-${project.version}+${release}.deb</deb>
 							<controlDir>${project.basedir}/deb/control</controlDir>
 							<verbose>false</verbose>
 							<dataSet>
@@ -27,9 +28,19 @@
 									<src>${project.basedir}/bayeosdevice</src>
 									<mapper>
 										<type>perm</type>
-										<prefix>/usr/lib/python2.7/dist-packages/bayeosdevice</prefix>
+										<prefix>/usr/lib/python3/dist-packages/bayeosdevice</prefix>
 									</mapper>
 									<type>directory</type>
+								</data>
+								<data>
+									<src>${project.basedir}/demo</src>
+									<mapper>
+										<type>perm</type>
+										<prefix>/usr/share/doc/python3-bayeosdevice/demo</prefix>
+									</mapper>
+									<type>directory</type>
+
+									<excludes>*.png</excludes>
 								</data>
 							</dataSet>
 						</configuration>

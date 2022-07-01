@@ -3,6 +3,7 @@ Version: [[version]]
 Section: python
 Priority: optional
 Architecture: all
-Depends: python (>=2.7), python-tornado
+Depends: python3 (>=3.9), python3-tornado
+Recommends: python3-psutil, python3-bayeosgatewayclient
 Description: Python BayEOS Device Web Library
 Maintainer: oliver.archner@uni-bayreuth.de

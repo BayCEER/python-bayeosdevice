@@ -3,7 +3,7 @@ import weakref
 """Observable types and handlers"""
 
 class __itemDict__( type ):
-    def __new__( cls, name, bases, classdict ):     
+    def __new__( cls, name, bases, classdict ):           
         def handlers( self ):
             if not hasattr( self, "__handlers" ):
                 setattr( self, "__handlers", weakref.WeakSet() )
@@ -37,9 +37,9 @@ class SetItemHandler( object ):
     def notify( self, key, newValue, oldValue, event):
         raise NotImplementedError("must be implemented by subclass")
 
-class ItemDict(dict):
+class ItemDict(dict,metaclass=__itemDict__):
     """" A dictionary which fires set item events on registered handlers"""
-    __metaclass__ = __itemDict__
+    
    
      
        

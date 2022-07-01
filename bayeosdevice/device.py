@@ -1,22 +1,16 @@
 
-import tornado.web
-import tornado.ioloop
-import tornado.httpserver
 import logging
-import threading
 import socket
 import json
 import os
 import re
-import datetime
-
-
+import tornado
+import asyncio
 from threading import Thread
 from tornado.web import RequestHandler, Application
 from tornado.websocket import WebSocketClosedError, WebSocketError, WebSocketHandler
 from bayeosdevice.item import SetItemHandler
-from ConfigParser import SafeConfigParser
-
+from configparser import ConfigParser
 
 log = logging.getLogger(__name__)
 
@@ -119,8 +113,8 @@ class ConfigFileHandler(SetItemHandler):
             self.config.add_section("ACTIONS")
         
     def notify(self, key, newValue, oldValue, event=None):
-        self.config.set('ACTIONS',key,str(newValue))
-        with open(self.file, 'wb') as configfile:
+        self.config['ACTIONS'][key] = str(newValue)
+        with open(self.file, 'w') as configfile:
             self.config.write(configfile)
         
 
@@ -131,7 +125,7 @@ class DeviceController(Thread):
     
     value_controls = None
     action_controls = None
-    iol = None
+    she = None
             
     def logMessage(self,msg):
         log.debug("Message:" + str(msg))
@@ -186,14 +180,14 @@ class DeviceController(Thread):
         WebSocket.send_message(json.dumps([{'type':'e','key':key,'value':str(error)}]))         
 
     def __init__(self, values, actions,units={}, components={}, configFile="", port=80, password="bayeos", template="items.html"): 
-        Thread.__init__(self,name="DeviceController")    
+        Thread.__init__(self,name="DeviceController",daemon=True)    
 
         self.valueHandler = ValueHandler()
         values.addHandler(self.valueHandler) 
         DeviceController.values = values 
 
         if configFile != "":
-            p = SafeConfigParser()
+            p = ConfigParser()
             if p.read(configFile):
                 for key,value in actions.items():
                     if p.has_option("ACTIONS",key):
@@ -253,7 +247,8 @@ class DeviceController(Thread):
                     d['prop'] = co['prop']
         return d;   
 
-    def run(self):        
+
+    async def main(self):        
         log.debug('Starting DeviceController')
         handlers = [
                 ("/", MainHandler, {'template':self.template}),
@@ -269,19 +264,18 @@ class DeviceController(Thread):
             debug=False,
         )      
         
-        application = Application(handlers,**settings)        
-        http_server = tornado.httpserver.HTTPServer(application)
-        http_server.listen(self.port)  
-        self.iol = tornado.ioloop.IOLoop.current()
-        self.iol.start()
-        http_server.stop()
-        log.debug("Web server stopped")  
-
-
-    def stop(self):
-        log.debug("Stopping DeviceController")
-        self.iol.add_callback(self.iol.stop)
-    
+        app = Application(handlers=handlers,**settings)                
+        app.listen(self.port)        
+        await asyncio.Event().wait()        
+        
+    def run(self):         
+        asyncio.run(self.main())          
+                
+        
+        
+        
+        
+        
          
 
 

@@ -19,18 +19,21 @@ The module implements a typical model-view-controller pattern (MVC):
 
 ### Prerequisites
 
-- Python Runtime
+- Python Runtime >=3.7
 
 ### Installing on Linux
 
+- Install basic tools for installation  
+  `apt-get update`  
+  `apt-get install wget gnupg`
 - Import the repository key  
   `wget -O - http://www.bayceer.uni-bayreuth.de/repos/apt/conf/bayceer_repo.gpg.key |apt-key add -`
-- Add the following repository to /etc/apt/sources.list  
-  `deb http://www.bayceer.uni-bayreuth.de/repos/apt/debian stretch main`
+- Add the BayCEER Debian repository  
+  `echo "deb http://www.bayceer.uni-bayreuth.de/repos/apt/debian $(lsb_release -c -s) main" | tee /etc/apt/sources.list.d/bayceer.list`
 - Update your repository cache  
   `apt-get update`
 - Install the package  
-  `apt-get install python-bayeosdevice`
+  `apt-get install python3-bayeosdevice`
 
 ### Installation on Windows
 
@@ -71,7 +74,7 @@ try:
         else:
             time.sleep(0.01)
 except KeyboardInterrupt:
-    con.stop()
+    print('Exit')
 ```
 
 - Please run the script and open http://localhost in your browser
@@ -154,6 +157,13 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 - **Oliver Archner** - _Programmer_ - [BayCEER, University of Bayreuth](https://www.bayceer.uni-bayreuth.de)
 
 ## History
+
+### Version 1.4.3, Jun, 2022
+
+- Python version >= 3.9 only
+- DeviceController thread as daemon
+- Dropped DeviceController stop method
+- Demo distribution in doc folder
 
 ### Version 1.4.2, Dez, 2021
 

@@ -1,0 +1,9 @@
+[Unit]
+Description=bayeos device
+
+[Service]
+User=root
+ExecStart=/usr/bin/device.py 
+
+[Install]
+WantedBy=multi-user.target
