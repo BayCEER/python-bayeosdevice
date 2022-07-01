@@ -149,7 +149,7 @@ con.start()
 
 ![Values](docs/viewcontrols.png)
 
-For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py)
+More examples can be found in folder demo.
 
 ## Authors
 
@@ -163,7 +163,7 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 - Python version >= 3.7
 - DeviceController thread as daemon
 - Dropped DeviceController stop method
-- Demo distribution in doc folder
+- Demo folder with usage examples
 
 ### Version 1.4.2, Dez, 2021
 
