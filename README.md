@@ -160,7 +160,7 @@ For more details and a running example see [cpu_device_b.py](docs/cpudevice_b.py
 
 ### Version 1.4.3, Jun, 2022
 
-- Python version >= 3.9 only
+- Python version >= 3.7
 - DeviceController thread as daemon
 - Dropped DeviceController stop method
 - Demo distribution in doc folder
